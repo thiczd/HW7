@@ -11,7 +11,7 @@ class Child1 extends Component {
     this.destroyChart();
 
     this.renderChart();
-    console.log(this.props.json_data); // Use this data as default. When the user will upload data this props will provide you the updated data
+    // console.log(this.props.json_data); // proper JSON data passed
   }
 
   destroyChart = () => {
@@ -20,7 +20,46 @@ class Child1 extends Component {
     d3.select("#mychart").append("g");
   };
 
-  renderChart = () => {};
+  renderChart = () => {
+    const data = this.props.json_data;
+    // CREATE FORCE LAYOUT, FOR EACH MONTH
+    //
+    //   {
+    //       "RawTweet":"my tweet",
+    //       "Month":"March",
+    //       "Dimension 1":-26.635721,
+    //       "Dimension 2":-14.823018,
+    //       "Sentiment":-0.192255892,
+    //       "Subjectivity":0.516666667,
+    //       "idx":1
+    //   },
+    // Array of Json OBJECT
+    /////////////////////////////
+    // Organize per month
+    // Separate array for March, April, May
+    const marchData = data.filter((item) => {
+      return item.Month === "March";
+    });
+    console.log("March:");
+    console.log(marchData);
+    const aprilData = data.filter((item) => {
+      return item.Month === "April";
+    });
+    console.log("April:");
+    console.log(aprilData);
+    const mayData = data.filter((item) => {
+      return item.Month === "May";
+    });
+    console.log("May:");
+    console.log(mayData);
+
+    ////////////////////////////////////
+    // Plot each array month into its own chart
+    // forcelayout
+    ////////////////////////////////////
+    // Plot for sentimnet first then add
+    // subjectivity
+  };
 
   render() {
     return (
