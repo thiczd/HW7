@@ -16,10 +16,14 @@ class Child1 extends Component {
   };
 
   componentDidMount() {
-    this.renderChart();
+    if (this.props.json_data) {
+      this.renderChart();
+    }
   }
-  componentDidUpdate(prevState) {
-    // Only update colors if the color state has changed
+  componentDidUpdate(prevProps, prevState) {
+    // Compare previous color state and if changed then
+    // change the d3 settings
+
     if (prevState.color !== this.state.color) {
       const sentimentColorScale = d3
         .scaleLinear()
@@ -39,15 +43,15 @@ class Child1 extends Component {
             : subjectivityColorScale(d.Subjectivity)
         );
     } else {
-      this.renderChart();
+      if (prevProps.json_data !== this.props.json_data) {
+        this.renderChart(); // Re-render chart if json_data changes
+      }
     }
   }
 
-  destroyChart = () => {
+  destroyChart() {
     d3.select("#mychart").selectAll("*").remove();
-
-    d3.select("#mychart").append("g");
-  };
+  }
 
   renderChart = () => {
     const data = this.props.json_data.slice(0, 300);
