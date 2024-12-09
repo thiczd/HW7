@@ -42,10 +42,9 @@ class Child1 extends Component {
             ? sentimentColorScale(d.Sentiment)
             : subjectivityColorScale(d.Subjectivity)
         );
-    } else {
-      if (prevProps.json_data !== this.props.json_data) {
-        this.renderChart(); // Re-render chart if json_data changes
-      }
+    }
+    if (prevProps.json_data !== this.props.json_data) {
+      this.renderChart(); // Re-render chart if json_data changes
     }
   }
 
