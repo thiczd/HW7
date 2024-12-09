@@ -21,7 +21,8 @@ class Child1 extends Component {
   };
 
   renderChart = () => {
-    const data = this.props.json_data;
+    const data = this.props.json_data.slice(0, 300);
+
     // CREATE FORCE LAYOUT, FOR EACH MONTH
     //
     //   {
