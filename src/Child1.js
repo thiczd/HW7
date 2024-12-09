@@ -34,6 +34,16 @@ class Child1 extends Component {
 
     const catCenters = [100, 200, 300]; // Adjusted for better spacing
     const xPos = 1;
+    const sentimentColorScale = d3
+      .scaleLinear()
+      .domain([-1, 0, 1])
+      .range(["red", "#ECECEC", "green"]);
+    const subjectivityColorScale = d3
+      .scaleLinear()
+      .domain([0, 1])
+      .range(["#ECECEC", "#4467C4"]);
+
+    // creating the force simulation
     d3.forceSimulation(data)
       .force(
         "y",
@@ -48,10 +58,17 @@ class Child1 extends Component {
           .data(data)
           .join("circle")
           .attr("r", "5")
-          .style("fill", "red")
+          .style("fill", (d) => sentimentColorScale(d.Sentiment)) // Need to fix color
           .attr("cx", (d) => d.x + 350)
           .attr("cy", (d) => d.y);
       });
+
+    // TODO:
+    // ADD COLOR FOR SENTIMENT, THEN SUBJECTIVITY
+    // ADD MONTH ON LEFT HAND SIDE
+    // DROPDOWN FOR Color Switch
+    // ADD LEGEND
+    // Tweet selection and highlight when clicking
 
     // CREATE FORCE LAYOUT, FOR EACH MONTH
     //
@@ -64,32 +81,6 @@ class Child1 extends Component {
     //       "Subjectivity":0.516666667,
     //       "idx":1
     //   },
-    // Array of Json OBJECT
-    /////////////////////////////
-    // Organize per month
-    // Separate array for March, April, May
-    // const marchData = data.filter((item) => {
-    //   return item.Month === "March";
-    // });
-    // console.log("March:");
-    // console.log(marchData);
-    // const aprilData = data.filter((item) => {
-    //   return item.Month === "April";
-    // });
-    // console.log("April:");
-    // console.log(aprilData);
-    // const mayData = data.filter((item) => {
-    //   return item.Month === "May";
-    // });
-    // console.log("May:");
-    // console.log(mayData);
-
-    ////////////////////////////////////
-    // Plot each array month into its own chart
-    // forcelayout
-    ////////////////////////////////////
-    // Plot for sentimnet first then add
-    // subjectivity
   };
 
   render() {
