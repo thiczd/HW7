@@ -18,9 +18,29 @@ class Child1 extends Component {
   componentDidMount() {
     this.renderChart();
   }
+  componentDidUpdate(prevState) {
+    // Only update colors if the color state has changed
+    if (prevState.color !== this.state.color) {
+      const sentimentColorScale = d3
+        .scaleLinear()
+        .domain([-1, 0, 1])
+        .range(["red", "#ECECEC", "green"]);
 
-  componentDidUpdate() {
-    this.renderChart();
+      const subjectivityColorScale = d3
+        .scaleLinear()
+        .domain([0, 1])
+        .range(["#ECECEC", "#4467C4"]);
+
+      d3.select("g")
+        .selectAll("circle")
+        .style("fill", (d) =>
+          this.state.color === "sentiment"
+            ? sentimentColorScale(d.Sentiment)
+            : subjectivityColorScale(d.Subjectivity)
+        );
+    } else {
+      this.renderChart();
+    }
   }
 
   destroyChart = () => {
