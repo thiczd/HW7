@@ -22,6 +22,36 @@ class Child1 extends Component {
 
   renderChart = () => {
     const data = this.props.json_data.slice(0, 300);
+    data.forEach((item) => {
+      if (item.Month === "March") {
+        item.Month = 0; // Modify the property directly
+      } else if (item.Month === "April") {
+        item.Month = 1; // Modify the property directly
+      } else if (item.Month === "May") {
+        item.Month = 2; // Modify the property directly
+      }
+    });
+
+    const catCenters = [100, 200, 300]; // Adjusted for better spacing
+    const xPos = 1;
+    d3.forceSimulation(data)
+      .force(
+        "y",
+        d3.forceY((d) => catCenters[d.Month])
+      )
+      .force("x", d3.forceX(xPos).strength(0.0001))
+
+      .force("collision", d3.forceCollide(6))
+      .on("tick", () => {
+        d3.select("g")
+          .selectAll("circle")
+          .data(data)
+          .join("circle")
+          .attr("r", "5")
+          .style("fill", "red")
+          .attr("cx", (d) => d.x + 350)
+          .attr("cy", (d) => d.y);
+      });
 
     // CREATE FORCE LAYOUT, FOR EACH MONTH
     //
@@ -38,21 +68,21 @@ class Child1 extends Component {
     /////////////////////////////
     // Organize per month
     // Separate array for March, April, May
-    const marchData = data.filter((item) => {
-      return item.Month === "March";
-    });
-    console.log("March:");
-    console.log(marchData);
-    const aprilData = data.filter((item) => {
-      return item.Month === "April";
-    });
-    console.log("April:");
-    console.log(aprilData);
-    const mayData = data.filter((item) => {
-      return item.Month === "May";
-    });
-    console.log("May:");
-    console.log(mayData);
+    // const marchData = data.filter((item) => {
+    //   return item.Month === "March";
+    // });
+    // console.log("March:");
+    // console.log(marchData);
+    // const aprilData = data.filter((item) => {
+    //   return item.Month === "April";
+    // });
+    // console.log("April:");
+    // console.log(aprilData);
+    // const mayData = data.filter((item) => {
+    //   return item.Month === "May";
+    // });
+    // console.log("May:");
+    // console.log(mayData);
 
     ////////////////////////////////////
     // Plot each array month into its own chart
@@ -65,9 +95,8 @@ class Child1 extends Component {
   render() {
     return (
       <div className="mychart">
-        <svg width="1000" height="900" style={{ marginLeft: 45 + "px" }}>
+        <svg width="1200" height="900" style={{ marginLeft: 45 + "px" }}>
           <g className="container"></g>
-          <g className="bar-chart"></g>
         </svg>
       </div>
     );
