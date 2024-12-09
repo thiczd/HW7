@@ -2,16 +2,31 @@ import React, { Component } from "react";
 import * as d3 from "d3";
 import "./Child1.css";
 class Child1 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      color: "sentiment",
+    };
+  }
+  handleColorChange = (event) => {
+    const selectedOption = event.target.value;
+    // Set the color based on the selected option
+    if (selectedOption === "sentiment") {
+      this.setState({ color: "sentiment" }); // Set to red for sentiment
+    } else if (selectedOption === "subjectivity") {
+      this.setState({ color: "subjectivity" }); // Set to blue for subjectivity
+    }
+    console.log(this.state.color);
+  };
   componentDidMount() {
     this.renderChart();
   }
 
   componentDidUpdate() {
-    // console.log(this.props.csv_data);
-    this.destroyChart();
-
-    this.renderChart();
-    // console.log(this.props.json_data); // proper JSON data passed
+    // // console.log(this.props.csv_data);
+    // this.destroyChart();
+    // this.renderChart();
+    // // console.log(this.props.json_data); // proper JSON data passed
   }
 
   destroyChart = () => {
@@ -32,7 +47,7 @@ class Child1 extends Component {
       }
     });
 
-    const catCenters = [100, 200, 300]; // Adjusted for better spacing
+    const catCenters = [100, 225, 325]; // Adjusted for better spacing
     const xPos = 1;
     const sentimentColorScale = d3
       .scaleLinear()
@@ -49,7 +64,7 @@ class Child1 extends Component {
         "y",
         d3.forceY((d) => catCenters[d.Month])
       )
-      .force("x", d3.forceX(xPos).strength(0.0001))
+      .force("x", d3.forceX(xPos).strength(0.005))
 
       .force("collision", d3.forceCollide(6))
       .on("tick", () => {
@@ -58,7 +73,11 @@ class Child1 extends Component {
           .data(data)
           .join("circle")
           .attr("r", "5")
-          .style("fill", (d) => sentimentColorScale(d.Sentiment)) // Need to fix color
+          .style("fill", (d) =>
+            this.state.color === "sentiment"
+              ? sentimentColorScale(d.Sentiment)
+              : subjectivityColorScale(d.Subjectivity)
+          ) // Need to fix color
           .attr("cx", (d) => d.x + 350)
           .attr("cy", (d) => d.y);
       });
@@ -85,10 +104,16 @@ class Child1 extends Component {
 
   render() {
     return (
-      <div className="mychart">
-        <svg width="1200" height="900" style={{ marginLeft: 45 + "px" }}>
-          <g className="container"></g>
-        </svg>
+      <div>
+        <select onChange={this.handleColorChange}>
+          <option value="sentiment">Sentiment</option>
+          <option value="subjectivity">Subjectivity</option>
+        </select>
+        <div className="mychart">
+          <svg width="1200" height="900" style={{ marginLeft: 45 + "px" }}>
+            <g className="container"></g>
+          </svg>
+        </div>
       </div>
     );
   }
