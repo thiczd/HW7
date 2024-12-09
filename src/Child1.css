@@ -2,3 +2,12 @@
   display: flex;
   justify-content: center;
 }
+
+.dropdown-group {
+  margin: 12px;
+}
+
+.dropdown-group span {
+  margin-right: 12px;
+  font-weight: bold;
+}

@@ -11,22 +11,16 @@ class Child1 extends Component {
   handleColorChange = (event) => {
     const selectedOption = event.target.value;
     // Set the color based on the selected option
-    if (selectedOption === "sentiment") {
-      this.setState({ color: "sentiment" }); // Set to red for sentiment
-    } else if (selectedOption === "subjectivity") {
-      this.setState({ color: "subjectivity" }); // Set to blue for subjectivity
-    }
+    this.setState({ color: selectedOption });
     console.log(this.state.color);
   };
+
   componentDidMount() {
     this.renderChart();
   }
 
   componentDidUpdate() {
-    // // console.log(this.props.csv_data);
-    // this.destroyChart();
-    // this.renderChart();
-    // // console.log(this.props.json_data); // proper JSON data passed
+    this.renderChart();
   }
 
   destroyChart = () => {
@@ -58,7 +52,18 @@ class Child1 extends Component {
       .domain([0, 1])
       .range(["#ECECEC", "#4467C4"]);
 
+    const monthLabels = ["March", "April", "May"];
+    d3.select("svg")
+      .selectAll("text")
+      .data(monthLabels)
+      .join("text")
+      .attr("x", 10)
+      .attr("y", (d, i) => catCenters[i])
+      .style("font-size", "16px")
+      .style("font-weight", "bold")
+      .text((d) => d);
     // creating the force simulation
+
     d3.forceSimulation(data)
       .force(
         "y",
@@ -83,14 +88,18 @@ class Child1 extends Component {
       });
 
     // TODO:
-    // ADD COLOR FOR SENTIMENT, THEN SUBJECTIVITY
-    // ADD MONTH ON LEFT HAND SIDE
-    // DROPDOWN FOR Color Switch
     // ADD LEGEND
     // Tweet selection and highlight when clicking
 
-    // CREATE FORCE LAYOUT, FOR EACH MONTH
-    //
+    // DONE
+    // ADD MONTH ON LEFT HAND SIDE DONE
+    // FORCE LAYOUT - DONE
+    // SEPERATION PER MONTH - DONE
+    // SCALING FUNCTION Y - DONE
+    // ADD COLOR FOR SENTIMENT, THEN SUBJECTIVITY - DONE
+    // DROPDOWN FOR Color Switch - DONE
+
+    // MIGHT BE USEFUL, STRUCTURE JSON
     //   {
     //       "RawTweet":"my tweet",
     //       "Month":"March",
@@ -105,10 +114,13 @@ class Child1 extends Component {
   render() {
     return (
       <div>
-        <select onChange={this.handleColorChange}>
-          <option value="sentiment">Sentiment</option>
-          <option value="subjectivity">Subjectivity</option>
-        </select>
+        <div className="dropdown-group">
+          <span> Color By:</span>
+          <select onChange={this.handleColorChange}>
+            <option value="sentiment">Sentiment</option>
+            <option value="subjectivity">Subjectivity</option>
+          </select>
+        </div>
         <div className="mychart">
           <svg width="1200" height="900" style={{ marginLeft: 45 + "px" }}>
             <g className="container"></g>
