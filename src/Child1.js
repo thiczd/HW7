@@ -53,12 +53,12 @@ class Child1 extends Component {
 
     if (this.state.color === "subjectivity") {
       svg.selectAll("text").remove();
-      svg.append("text").text("Subjective").attr("x", 650).attr("y", 135);
-      svg.append("text").text("Objective").attr("x", 650).attr("y", 405);
+      svg.append("text").text("Subjective").attr("x", 650).attr("y", 60);
+      svg.append("text").text("Objective").attr("x", 650).attr("y", 345);
     } else {
       svg.selectAll("text").remove();
-      svg.append("text").text("Positive").attr("x", 650).attr("y", 135);
-      svg.append("text").text("Negative").attr("x", 650).attr("y", 405);
+      svg.append("text").text("Positive").attr("x", 650).attr("y", 60);
+      svg.append("text").text("Negative").attr("x", 650).attr("y", 345);
     }
     if (prevProps.json_data !== this.props.json_data) {
       this.renderChart(); // Re-render chart if json_data changes
@@ -138,7 +138,7 @@ class Child1 extends Component {
       .enter()
       .append("rect")
       .attr("x", 600)
-      .attr("y", (d, i) => 120 + i * 15) // Spaced vertically
+      .attr("y", (d, i) => 50 + i * 15) // Spaced vertically
       .attr("width", 30)
       .attr("height", 10)
       .attr("stroke", "black")
@@ -147,8 +147,8 @@ class Child1 extends Component {
           ? sentimentColorScale(d)
           : subjectivityColorScale(d)
       ); // Need to fix color
-    svg.append("text").text("Positive").attr("x", 650).attr("y", 135);
-    svg.append("text").text("Negative").attr("x", 650).attr("y", 405);
+    svg.append("text").text("Positive").attr("x", 650).attr("y", 60);
+    svg.append("text").text("Negative").attr("x", 650).attr("y", 345);
     // TODO:
     // ADD LEGEND
     // Tweet selection and highlight when clicking
