@@ -23,7 +23,7 @@ class Child1 extends Component {
   componentDidUpdate(prevProps, prevState) {
     // Compare previous color state and if changed then
     // change the d3 settings
-
+    const svg = d3.select("g");
     if (prevState.color !== this.state.color) {
       const sentimentColorScale = d3
         .scaleLinear()
@@ -35,13 +35,30 @@ class Child1 extends Component {
         .domain([0, 1])
         .range(["#ECECEC", "#4467C4"]);
 
-      d3.select("g")
+      svg
         .selectAll("circle")
         .style("fill", (d) =>
           this.state.color === "sentiment"
             ? sentimentColorScale(d.Sentiment)
             : subjectivityColorScale(d.Subjectivity)
         );
+      svg
+        .selectAll("rect")
+        .style("fill", (d) =>
+          this.state.color === "sentiment"
+            ? sentimentColorScale(d)
+            : subjectivityColorScale(d)
+        );
+    }
+
+    if (this.state.color === "subjectivity") {
+      svg.selectAll("text").remove();
+      svg.append("text").text("Subjective").attr("x", 650).attr("y", 135);
+      svg.append("text").text("Objective").attr("x", 650).attr("y", 405);
+    } else {
+      svg.selectAll("text").remove();
+      svg.append("text").text("Positive").attr("x", 650).attr("y", 135);
+      svg.append("text").text("Negative").attr("x", 650).attr("y", 405);
     }
     if (prevProps.json_data !== this.props.json_data) {
       this.renderChart(); // Re-render chart if json_data changes
@@ -109,7 +126,29 @@ class Child1 extends Component {
           .attr("cx", (d) => d.x + 350)
           .attr("cy", (d) => d.y);
       });
+    // create legend with 20 squares stacked vertically
 
+    var svg = d3.select("g");
+
+    const values = d3.range(20).map((d) => 1 - (d / 19) * 2);
+
+    svg
+      .selectAll("rect")
+      .data(values)
+      .enter()
+      .append("rect")
+      .attr("x", 600)
+      .attr("y", (d, i) => 120 + i * 15) // Spaced vertically
+      .attr("width", 30)
+      .attr("height", 10)
+      .attr("stroke", "black")
+      .style("fill", (d) =>
+        this.state.color === "sentiment"
+          ? sentimentColorScale(d)
+          : subjectivityColorScale(d)
+      ); // Need to fix color
+    svg.append("text").text("Positive").attr("x", 650).attr("y", 135);
+    svg.append("text").text("Negative").attr("x", 650).attr("y", 405);
     // TODO:
     // ADD LEGEND
     // Tweet selection and highlight when clicking
