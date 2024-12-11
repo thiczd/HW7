@@ -6,6 +6,7 @@ class Child1 extends Component {
     super(props);
     this.state = {
       color: "sentiment",
+      tweets: [],
     };
   }
   handleColorChange = (event) => {
@@ -69,6 +70,13 @@ class Child1 extends Component {
     d3.select("#mychart").selectAll("*").remove();
   }
 
+  updateTweet(element) {
+    console.log("displaying", element);
+    this.setState((prevState) => ({
+      tweets: [...prevState.tweets, element.RawTweet], // Append the newTweet to the array
+    }));
+  }
+
   renderChart = () => {
     const data = this.props.json_data.slice(0, 300);
     data.forEach((item) => {
@@ -124,8 +132,14 @@ class Child1 extends Component {
               : subjectivityColorScale(d.Subjectivity)
           ) // Need to fix color
           .attr("cx", (d) => d.x + 350)
-          .attr("cy", (d) => d.y);
+          .attr("cy", (d) => d.y)
+          .on("click", (event, d) => {
+            d3.select(event.target).attr("stroke", "black");
+            console.log(d);
+            this.updateTweet(d);
+          });
       });
+
     // create legend with 20 squares stacked vertically
 
     var svg = d3.select("g");
@@ -184,10 +198,17 @@ class Child1 extends Component {
           </select>
         </div>
         <div className="mychart">
-          <svg width="1200" height="900" style={{ marginLeft: 45 + "px" }}>
+          <svg width="1200" height="400" style={{ marginLeft: 45 + "px" }}>
             <g className="container"></g>
           </svg>
         </div>
+        <ul style={{ margin: "12px" }}>
+          {this.state.tweets.map((tweet, index) => (
+            <li key={index} style={{ marginBottom: "4px" }}>
+              {tweet}
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
