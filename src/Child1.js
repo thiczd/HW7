@@ -53,14 +53,46 @@ class Child1 extends Component {
     }
 
     if (this.state.color === "subjectivity") {
-      svg.selectAll("text").remove();
-      svg.append("text").text("Subjective").attr("x", 650).attr("y", 60);
-      svg.append("text").text("Objective").attr("x", 650).attr("y", 345);
+      svg.selectAll("#legend").remove();
+      svg
+        .append("text")
+        .text("Subjective")
+        .attr("x", 650)
+        .attr("y", 60)
+        .attr("id", "legend");
+      svg
+        .append("text")
+        .text("Objective")
+        .attr("x", 650)
+        .attr("y", 345)
+        .attr("id", "legend");
     } else {
-      svg.selectAll("text").remove();
-      svg.append("text").text("Positive").attr("x", 650).attr("y", 60);
-      svg.append("text").text("Negative").attr("x", 650).attr("y", 345);
+      svg.selectAll("#legend").remove();
+      svg
+        .append("text")
+        .text("Positive")
+        .attr("x", 650)
+        .attr("y", 60)
+        .attr("id", "legend");
+      svg
+        .append("text")
+        .text("Negative")
+        .attr("x", 650)
+        .attr("y", 345)
+        .attr("id", "legend");
     }
+    const catCenters = [100, 225, 325]; // Adjusted for better spacing
+
+    const monthLabels = ["March", "April", "May"];
+    d3.select("svg")
+      .selectAll("#month")
+      .data(monthLabels)
+      .join("text")
+      .attr("x", 10)
+      .attr("y", (d, i) => catCenters[i])
+      .style("font-size", "16px")
+      .style("font-weight", "bold")
+      .text((d) => d);
     if (prevProps.json_data !== this.props.json_data) {
       this.renderChart(); // Re-render chart if json_data changes
     }
@@ -108,6 +140,7 @@ class Child1 extends Component {
       .selectAll("text")
       .data(monthLabels)
       .join("text")
+      .attr("id", "month")
       .attr("x", 10)
       .attr("y", (d, i) => catCenters[i])
       .style("font-size", "16px")
@@ -163,9 +196,19 @@ class Child1 extends Component {
           ? sentimentColorScale(d)
           : subjectivityColorScale(d)
       ); // Need to fix color
-    svg.append("text").text("Positive").attr("x", 650).attr("y", 60);
-    svg.append("text").text("Negative").attr("x", 650).attr("y", 345);
+    svg
+      .append("text")
+      .text("Positive")
+      .attr("x", 650)
+      .attr("y", 60)
+      .attr("id", "legend");
 
+    svg
+      .append("text")
+      .text("Negative")
+      .attr("x", 650)
+      .attr("y", 345)
+      .attr("id", "legend");
     // TODO:
     // ADD LEGEND
     // Tweet selection and highlight when clicking
