@@ -78,6 +78,10 @@ class Child1 extends Component {
   }
 
   renderChart = () => {
+    if (!this.props.json_data || this.props.json_data.length === 0) {
+      return; // Exit the function if there's no data prevent legend and axis to be rendered unnecessarily
+    }
+
     const data = this.props.json_data.slice(0, 300);
     data.forEach((item) => {
       if (item.Month === "March") {
@@ -99,7 +103,6 @@ class Child1 extends Component {
       .scaleLinear()
       .domain([0, 1])
       .range(["#ECECEC", "#4467C4"]);
-
     const monthLabels = ["March", "April", "May"];
     d3.select("svg")
       .selectAll("text")
@@ -141,7 +144,6 @@ class Child1 extends Component {
       });
 
     // create legend with 20 squares stacked vertically
-
     var svg = d3.select("g");
 
     const values = d3.range(20).map((d) => 1 - (d / 19) * 2);
@@ -163,6 +165,7 @@ class Child1 extends Component {
       ); // Need to fix color
     svg.append("text").text("Positive").attr("x", 650).attr("y", 60);
     svg.append("text").text("Negative").attr("x", 650).attr("y", 345);
+
     // TODO:
     // ADD LEGEND
     // Tweet selection and highlight when clicking
@@ -190,13 +193,15 @@ class Child1 extends Component {
   render() {
     return (
       <div>
-        <div className="dropdown-group">
-          <span> Color By:</span>
-          <select onChange={this.handleColorChange}>
-            <option value="sentiment">Sentiment</option>
-            <option value="subjectivity">Subjectivity</option>
-          </select>
-        </div>
+        {this.props.json_data && this.props.json_data.length > 0 && (
+          <div className="dropdown-group">
+            <span> Color By:</span>
+            <select onChange={this.handleColorChange}>
+              <option value="sentiment">Sentiment</option>
+              <option value="subjectivity">Subjectivity</option>
+            </select>
+          </div>
+        )}
         <div className="mychart">
           <svg width="1200" height="400" style={{ marginLeft: 45 + "px" }}>
             <g className="container"></g>
